@@ -40,12 +40,9 @@ class WebUrlCrawler:
         return WebSite(url, title, body, links)
 
 class LLMClient:
-    def __init__(self, model, base_url=None):
+    def __init__(self, model):
         self.model = model
-        if base_url:
-            self.openai = OpenAI(base_url=base_url, api_key=model)
-        else:
-            self.openai = OpenAI()
+        self.openai = OpenAI()
 
     def generate_text(self, user_prompt, system_prompt="") -> str:
         messages = [
@@ -58,15 +55,11 @@ class LLMClient:
         )
         return response.choices[0].message.content
 
-def summarize_webpage(url, model_choice):
+def summarize_webpage(url):
     try:
-        # Initialize crawler and LLM client based on model choice
+        # Initialize crawler and LLM client
         crawler = WebUrlCrawler()
-        
-        if model_choice == "OpenAI GPT-4o-mini":
-            llm_client = LLMClient(model="gpt-4o-mini")
-        else:  # Local GPT-OSS:20b
-            llm_client = LLMClient(model="gpt-oss:20b", base_url="http://localhost:11434/v1")
+        llm_client = LLMClient(model="gpt-4o-mini")
         
         # Crawl the website
         website = crawler.crawl(url)
@@ -93,14 +86,13 @@ def main():
         An intelligent web content summarization tool that extracts and condenses webpage information using advanced AI models.
         
         ### ✨ Features:
-        - 🤖 **Dual AI Models**: OpenAI GPT-4o-mini or local GPT-OSS:20b
-        - 🕷️ **Smart Web Scraping**: Handles both static and dynamic content
+        - 🤖 **AI-Powered**: Uses OpenAI GPT-4o-mini for intelligent summaries
+        - 🕷️ **Smart Web Scraping**: Handles static web content efficiently
         - 📝 **Markdown Output**: Clean, formatted summaries
         
         ### 🚀 How to use:
         1. Enter a webpage URL
-        2. Choose your AI model
-        3. Click "Summarize" to get an intelligent summary
+        2. Click "Summarize" to get an intelligent summary
         """)
         
         with gr.Row():
@@ -111,11 +103,6 @@ def main():
                     lines=1
                 )
                 
-                model_choice = gr.Radio(
-                    choices=["OpenAI GPT-4o-mini", "Local GPT-OSS:20b"],
-                    value="OpenAI GPT-4o-mini",
-                    label="🤖 Choose AI Model"
-                )
                 
                 summarize_btn = gr.Button("📋 Summarize", variant="primary")
             
@@ -128,23 +115,22 @@ def main():
         # Event handlers
         summarize_btn.click(
             fn=summarize_webpage,
-            inputs=[url_input, model_choice],
+            inputs=[url_input],
             outputs=output
         )
         
         # Examples
         gr.Examples(
             examples=[
-                ["https://en.wikipedia.org/wiki/Marie_Curie", "OpenAI GPT-4o-mini"],
-                ["https://en.wikipedia.org/wiki/Artificial_intelligence", "OpenAI GPT-4o-mini"],
+                ["https://en.wikipedia.org/wiki/Marie_Curie"],
+                ["https://en.wikipedia.org/wiki/Artificial_intelligence"],
             ],
-            inputs=[url_input, model_choice]
+            inputs=[url_input]
         )
         
         gr.Markdown("""
         ### 💡 Tips:
         - For best results, use URLs with substantial text content
-        - Local GPT-OSS:20b requires Ollama to be running locally
         - The tool works best with articles, blog posts, and documentation
         """)
     

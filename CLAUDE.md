@@ -15,8 +15,7 @@ pip install -r requirements.txt
 ```
 
 ### Environment Setup
-- For OpenAI models: Set `OPENAI_API_KEY` environment variable
-- For local GPT-OSS models: Install Ollama, pull `gpt-oss:20b` model, and run `ollama serve`
+- Set `OPENAI_API_KEY` environment variable
 
 ## Architecture
 
@@ -25,20 +24,19 @@ This is a Gradio-based web application for webpage summarization with the follow
 ### Core Classes
 - **WebSite**: Data structure holding webpage content (url, title, body, links)
 - **WebUrlCrawler**: Handles web scraping using BeautifulSoup with request headers and content cleaning
-- **LLMClient**: Unified interface for both OpenAI API and local Ollama models
+- **LLMClient**: Interface for OpenAI API integration
 
 ### Application Flow
 1. User inputs URL via Gradio interface
 2. WebUrlCrawler extracts webpage content and removes irrelevant elements (scripts, styles, images)
-3. LLMClient generates summary using either OpenAI GPT-4o-mini or local GPT-OSS:20b model
+3. LLMClient generates summary using OpenAI GPT-4o-mini model
 4. Summary returned as markdown with TL;DR section
 
 ### Model Integration
-- OpenAI models use standard OpenAI client
-- Local models connect to Ollama server at `http://localhost:11434/v1`
-- Single `generate_text` method abstracts model differences
+- Uses standard OpenAI client
+- Single `generate_text` method for API communication
 
 ### Interface Design
-- Gradio Blocks layout with URL input, model selection radio buttons
+- Gradio Blocks layout with URL input
 - Markdown output component for formatted summaries
 - Pre-configured examples for testing
