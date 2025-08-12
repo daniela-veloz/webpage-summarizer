@@ -27,7 +27,7 @@ jobs:
         rsync -av --exclude='.git' ../. .
         
         # Configure git with HF token
-        git remote set-url origin https://daniela-veloz:${HF_TOKEN}@git.hf.co/spaces/daniela-veloz/WebSummarizer
+        git remote set-url origin https://daniela-veloz:${HF_TOKEN}@huggingface.co/spaces/daniela-veloz/WebSummarizer
         
         # Commit and push changes
         git add .

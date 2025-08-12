@@ -5,7 +5,27 @@ from pathlib import Path
 
 
 class URLCache:
+    """
+    File-based caching system for URL summaries.
+    
+    This class provides a simple file-based cache that stores webpage summaries
+    with automatic expiration. Cache keys are generated using MD5 hashes of URLs,
+    and cached data includes timestamps for expiration management.
+    
+    Attributes:
+        cache_dir (Path): Directory for storing cache files
+        cache_hours (int): Cache expiration time in hours
+    """
     def __init__(self, cache_dir=".cache", cache_hours=24):
+        """
+        Initialize the URL cache.
+        
+        Args:
+            cache_dir (str): Directory path for storing cache files.
+                           Defaults to '.cache'.
+            cache_hours (int): Cache expiration time in hours.
+                             Defaults to 24 hours.
+        """
         self.cache_dir = Path(cache_dir)
         self.cache_dir.mkdir(exist_ok=True)
         self.cache_hours = cache_hours
@@ -17,6 +37,18 @@ class URLCache:
         return self.cache_dir / f"{cache_key}.json"
     
     def get(self, url):
+        """
+        Retrieve a cached summary for the given URL.
+        
+        Checks if a valid (non-expired) cache entry exists for the URL.
+        Automatically removes expired cache files.
+        
+        Args:
+            url (str): The URL to look up in cache
+            
+        Returns:
+            str or None: The cached summary if found and valid, None otherwise
+        """
         cache_key = self._get_cache_key(url)
         cache_file = self._get_cache_file(cache_key)
         
@@ -43,6 +75,16 @@ class URLCache:
             return None
     
     def set(self, url, summary):
+        """
+        Store a summary in the cache for the given URL.
+        
+        Creates a cache entry with the current timestamp for expiration tracking.
+        Handles file writing errors gracefully by continuing without caching.
+        
+        Args:
+            url (str): The URL to cache the summary for
+            summary (str): The summary content to cache
+        """
         cache_key = self._get_cache_key(url)
         cache_file = self._get_cache_file(cache_key)
         

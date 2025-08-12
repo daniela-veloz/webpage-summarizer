@@ -14,7 +14,12 @@ DEFAULT_COOLDOWN_SECONDS = 60
 
 
 class RateLimitType(Enum):
-    """Types of rate limit violations"""
+    """
+    Enumeration of different types of rate limit violations.
+    
+    This enum defines the various ways a request can be rate limited,
+    allowing for specific handling and messaging for each case.
+    """
     NONE = "none"
     COOLDOWN = "cooldown"
     HOURLY_LIMIT = "hourly_limit"
@@ -23,7 +28,20 @@ class RateLimitType(Enum):
 
 @dataclass
 class RateLimitResult:
-    """Result of rate limit check"""
+    """
+    Result of a rate limit check operation.
+    
+    Contains all information about whether a request is allowed,
+    what type of limit was hit (if any), timing information,
+    and current usage statistics.
+    
+    Attributes:
+        valid (bool): Whether the request is allowed
+        limit_type (RateLimitType): Type of rate limit violation (if any)
+        remaining_cooldown (int): Seconds remaining in cooldown period
+        next_reset (int): Minutes/hours until next limit reset
+        stats (Dict[str, Any]): Current usage statistics
+    """
     valid: bool
     limit_type: RateLimitType
     remaining_cooldown: int
@@ -31,7 +49,27 @@ class RateLimitResult:
     stats: Dict[str, Any]
 
 class RateLimiter:
+    """
+    IP-based rate limiting system with multiple limit types.
+    
+    This class implements a comprehensive rate limiting system that tracks
+    requests per IP address and enforces hourly limits, daily limits, and
+    cooldown periods between requests. Data is persisted to JSON files.
+    
+    Attributes:
+        rate_dir (Path): Directory for storing rate limit data files
+        hourly_limit (int): Maximum requests allowed per hour
+        daily_limit (int): Maximum requests allowed per day
+        cooldown_seconds (int): Minimum seconds between requests
+    """
     def __init__(self, rate_dir=".rate_limits"):
+        """
+        Initialize the rate limiter.
+        
+        Args:
+            rate_dir (str): Directory path for storing rate limit data files.
+                           Defaults to '.rate_limits'.
+        """
         self.rate_dir = Path(rate_dir)
         self.rate_dir.mkdir(exist_ok=True)
         
@@ -75,6 +113,17 @@ class RateLimiter:
         return 0
     
     def check_rate_limit(self):
+        """
+        Check if the current IP address is within rate limits.
+        
+        Performs a comprehensive check of all rate limiting rules including
+        cooldown period, hourly limits, and daily limits. Also cleans up
+        old request data and provides current usage statistics.
+        
+        Returns:
+            RateLimitResult: Complete result including validity, limit type,
+                           timing information, and usage statistics
+        """
         """Check if IP address is within rate limits"""
         ip_address = IPExtractor.get_client_ip()
         current_time = self._get_current_time()
@@ -108,6 +157,15 @@ class RateLimiter:
         )
 
     def record_request(self, ip_address):
+        """
+        Record a new request for the specified IP address.
+        
+        Updates the request history and timestamps for rate limiting tracking.
+        Also performs cleanup of old request data to maintain file sizes.
+        
+        Args:
+            ip_address (str): The IP address making the request
+        """
         """Record a new request for the IP address"""
         current_time = self._get_current_time()
         ip_file = self._get_ip_file(ip_address)
@@ -130,6 +188,15 @@ class RateLimiter:
             print(f"Warning: Could not save rate limit data: {e}")
     
     def _load_ip_data(self, ip_file):
+        """
+        Load IP rate limit data from file or return default structure.
+        
+        Args:
+            ip_file (Path): Path to the IP data file
+            
+        Returns:
+            dict: IP data structure with 'requests' list and 'last_request' timestamp
+        """
         """Load IP data from file or return default structure"""
         if ip_file.exists():
             try:
@@ -141,6 +208,16 @@ class RateLimiter:
             return {'requests': [], 'last_request': 0}
 
     def _get_usage_stats(self, requests, current_time):
+        """
+        Calculate current usage statistics for an IP address.
+        
+        Args:
+            requests (list): List of request timestamps
+            current_time (float): Current timestamp
+            
+        Returns:
+            dict: Usage statistics including hourly/daily used/remaining counts
+        """
         """Get current usage statistics"""
         hour_ago = current_time - 3600
         hourly_count = len([req for req in requests if req > hour_ago])

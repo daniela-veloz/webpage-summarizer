@@ -2,12 +2,32 @@ import logging
 import streamlit as st
 
 class IPExtractor:
+    """
+    Utility class for extracting client IP addresses from Streamlit context.
+    
+    This class provides methods to extract the real client IP address from
+    various HTTP headers, with fallback mechanisms for different deployment
+    scenarios including local development and cloud hosting.
+    
+    Attributes:
+        logger (logging.Logger): Logger instance for debugging
+        DEFAULT_IP_ADDRESS (str): Fallback IP address for local development
+    """
     logger = logging.getLogger(__name__)
     DEFAULT_IP_ADDRESS = "127.0.0.1"
 
     @staticmethod
     def get_client_ip() -> str:
-        """Extract client IP address from Streamlit context"""
+        """
+        Extract client IP address from Streamlit context.
+        
+        Attempts to extract the real client IP address from various HTTP headers
+        including x-forwarded-for, x-real-ip, and cf-connecting-ip. Falls back
+        to a default IP address if extraction fails or in local development.
+        
+        Returns:
+            str: The client IP address, or default IP if extraction fails
+        """
         client_ip = IPExtractor.DEFAULT_IP_ADDRESS  # Default fallback
         IPExtractor.logger.debug("Extracting IP from Streamlit context")
 

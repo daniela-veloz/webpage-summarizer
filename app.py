@@ -23,16 +23,34 @@ load_dotenv()
 # Initialize global components
 @st.cache_resource
 def get_cache():
+    """
+    Get or create a singleton URLCache instance.
+    
+    Returns:
+        URLCache: Cached instance for URL content caching
+    """
     return URLCache()
 
 
 @st.cache_resource
 def get_rate_limiter():
+    """
+    Get or create a singleton RateLimiter instance.
+    
+    Returns:
+        RateLimiter: Cached instance for rate limiting functionality
+    """
     return RateLimiter()
 
 
 @st.cache_resource
 def get_webpage_summarizer():
+    """
+    Get or create a singleton WebpageSummarizer instance.
+    
+    Returns:
+        WebpageSummarizer: Cached instance for webpage summarization
+    """
     return WebpageSummarizer()
 
 
@@ -43,7 +61,20 @@ webpage_summarizer = get_webpage_summarizer()
 
 
 def summarize_webpage(url: str) -> str:
-    """Summarize a webpage URL and return formatted result"""
+    """
+    Summarize a webpage URL and return formatted result.
+    
+    This function orchestrates the complete summarization process including
+    cache checking, rate limiting, content generation, and result formatting.
+    It handles all error cases and provides user-friendly feedback.
+    
+    Args:
+        url (str): The URL to summarize
+        
+    Returns:
+        str: Formatted result containing either the summary, cached result,
+             rate limit error, or error message
+    """
     try:
         # Get client IP address
         client_ip = IPExtractor.get_client_ip()
@@ -75,6 +106,13 @@ def summarize_webpage(url: str) -> str:
 
 
 def main():
+    """
+    Main Streamlit application function.
+    
+    Sets up the user interface, handles user interactions, and displays
+    the webpage summarization results. Includes sections for URL input,
+    example links, usage instructions, and contact information.
+    """
     # Main header
     st.title("🌐 WebPage Summarizer")
     st.markdown(

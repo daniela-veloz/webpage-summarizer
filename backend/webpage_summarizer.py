@@ -3,20 +3,47 @@ from backend.llm_client import LLMClient
 
 
 class WebpageSummarizer:
+    """
+    Main service for webpage summarization.
+    
+    This class orchestrates the process of crawling a webpage and generating
+    an AI-powered summary. It combines the WebUrlCrawler for content extraction
+    and LLMClient for text generation.
+    
+    Attributes:
+        model (str): The language model to use for summarization
+        crawler (WebUrlCrawler): Instance for crawling web content
+        llm_client (LLMClient): Instance for generating summaries
+    """
     def __init__(self, model="gpt-4o-mini"):
+        """
+        Initialize the webpage summarizer.
+        
+        Args:
+            model (str): The OpenAI model to use for summarization.
+                        Defaults to 'gpt-4o-mini'.
+        """
         self.model = model
         self.crawler = WebUrlCrawler()
         self.llm_client = LLMClient(model=model)
     
     def summarize(self, url: str) -> str:
         """
-        Crawl a webpage and generate a summary using LLM
+        Crawl a webpage and generate an AI-powered summary.
+        
+        This method combines web crawling and LLM-based text generation to create
+        a comprehensive summary of the webpage content. The summary includes a
+        TL;DR section and is formatted in markdown.
         
         Args:
-            url: The URL to summarize
+            url (str): The URL of the webpage to summarize
             
         Returns:
-            str: The generated summary
+            str: The generated summary in markdown format with TL;DR section
+            
+        Raises:
+            requests.RequestException: If webpage crawling fails
+            openai.OpenAIError: If LLM text generation fails
         """
         # Crawl the website
         website = self.crawler.crawl(url)
