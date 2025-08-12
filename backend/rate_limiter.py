@@ -56,14 +56,14 @@ class RateLimiter:
         
         if len(hourly_requests) >= self.hourly_limit:
             next_reset = int((min(hourly_requests) + 3600 - current_time) / 60)
-            return False, f"🚫 Hourly limit reached ({self.hourly_limit} requests/hour). Try again in {next_reset} minutes.", self._get_usage_stats(data['requests'], current_time)
+            return False, f"Hourly limit reached ({self.hourly_limit} requests/hour). Try again in {next_reset} minutes.", self._get_usage_stats(data['requests'], current_time)
         
         # Check daily limit
         if len(data['requests']) >= self.daily_limit:
             next_reset = int((min(data['requests']) + 24*3600 - current_time) / 3600)
-            return False, f"🚫 Daily limit reached ({self.daily_limit} requests/day). Try again in {next_reset} hours.", self._get_usage_stats(data['requests'], current_time)
+            return False, f"Daily limit reached ({self.daily_limit} requests/day). Try again in {next_reset} hours.", self._get_usage_stats(data['requests'], current_time)
         
-        return True, "✅ Request allowed", self._get_usage_stats(data['requests'], current_time)
+        return True, "Request allowed", self._get_usage_stats(data['requests'], current_time)
     
     def record_request(self, ip_address):
         """Record a new request for the IP address"""

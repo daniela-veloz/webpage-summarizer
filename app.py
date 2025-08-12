@@ -6,6 +6,7 @@ from backend.web_crawler import WebUrlCrawler
 from backend.rate_limiter import RateLimiter
 from backend.cache import URLCache
 from backend.llm_client import LLMClient
+from backend.ip_extractor import IPExtractor
 
 # Initialize global cache and rate limiter
 cache = URLCache()
@@ -14,22 +15,12 @@ rate_limiter = RateLimiter()
 def summarize_webpage(url, request: gr.Request = None):
     try:
         # Get client IP address
-        client_ip = "127.0.0.1"  # Default fallback
-        if request and hasattr(request, 'client') and request.client:
-            client_ip = request.client.host
-        elif request and hasattr(request, 'headers'):
-            # Try to get real IP from headers (for Hugging Face Spaces)
-            client_ip = (
-                request.headers.get('x-forwarded-for', '').split(',')[0].strip() or
-                request.headers.get('x-real-ip', '').strip() or
-                request.headers.get('cf-connecting-ip', '').strip() or
-                "127.0.0.1"
-            )
+        client_ip = IPExtractor.get_client_ip(request)
         
         # Check cache first (cached requests don't count against rate limit)
         cached_summary = cache.get(url)
         if cached_summary:
-            return f"📋 **Cached Result** \n\n{cached_summary}"
+            return f"**Cached Result** \n\n{cached_summary}"
         
         # Check rate limit for new requests
         allowed, message, stats = rate_limiter.check_rate_limit(client_ip)
