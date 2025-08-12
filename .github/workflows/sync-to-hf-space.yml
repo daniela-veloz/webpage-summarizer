@@ -8,29 +8,27 @@ jobs:
   sync-to-hf:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-        lfs: true
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
 
-    - name: Push to Hugging Face Space
-      env:
-        HF_TOKEN: ${{ secrets.HF_WRITE_TOKEN }}
-      run: |
-        git config --global user.email "action@github.com"
-        git config --global user.name "GitHub Action"
-        
-        # Configure git credential helper for Hugging Face
-        git config --global credential.helper store
-        echo "https://${HF_TOKEN}@git.hf.co" > ~/.git-credentials
-        
-        git clone https://git.hf.co/spaces/daniela-veloz/WebSummarizer hf-space
-        cd hf-space
-        
-        # Sync files using rsync, excluding .git directory
-        rsync -av --exclude='.git' ../. .
-        
-        # Commit and push changes
-        git add .
-        git commit -m "Sync from GitHub repo" || exit 0
-        git push origin main
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.HF_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan hf.co >> ~/.ssh/known_hosts
+
+      - name: Clone Hugging Face Space via SSH
+        run: |
+          git clone git@hf.co:spaces/daniela-veloz/WebSummarizer hf-space
+          cd hf-space
+
+          # Sync files using rsync, excluding .git directory
+          rsync -av --exclude='.git' ../. .
+
+          # Commit and push changes
+          git add .
+          git commit -m "Sync from GitHub repo" || exit 0
+          git push origin main
