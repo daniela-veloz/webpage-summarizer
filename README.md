@@ -204,6 +204,6 @@ Connect on LinkedIn for questions, feedback, or collaboration opportunities!
 
 ## 🔄 Auto-Sync
 
-This repository automatically syncs with [Hugging Face Space](https://huggingface.co/spaces/daniela-veloz/WebSummarizer) on every push to main.
+This repository automatically syncs with [Hugging Face Space](https://huggingface.co/spaces/daniela-veloz/WebSummarizer) on every push to main using efficient rsync technology.
 
 
