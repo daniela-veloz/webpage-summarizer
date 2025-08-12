@@ -20,14 +20,15 @@ jobs:
         git config --global user.email "action@github.com"
         git config --global user.name "GitHub Action"
         
-        git clone https://$HF_TOKEN@huggingface.co/spaces/daniela-veloz/WebSummarizer hf-space
+        # Configure git credential helper for Hugging Face
+        git config --global credential.helper store
+        echo "https://user:${HF_TOKEN}@huggingface.co" > ~/.git-credentials
+        
+        git clone https://huggingface.co/spaces/daniela-veloz/WebSummarizer hf-space
         cd hf-space
         
         # Sync files using rsync, excluding .git directory
         rsync -av --exclude='.git' ../. .
-        
-        # Configure git with HF token
-        git remote set-url origin https://$HF_TOKEN@huggingface.co/spaces/daniela-veloz/WebSummarizer
         
         # Commit and push changes
         git add .
