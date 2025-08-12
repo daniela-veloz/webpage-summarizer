@@ -22,9 +22,9 @@ jobs:
         
         # Configure git credential helper for Hugging Face
         git config --global credential.helper store
-        echo "https://user:${HF_TOKEN}@huggingface.co" > ~/.git-credentials
+        echo "https://${HF_TOKEN}@git.hf.co" > ~/.git-credentials
         
-        git clone https://huggingface.co/spaces/daniela-veloz/WebSummarizer hf-space
+        git clone https://git.hf.co/spaces/daniela-veloz/WebSummarizer hf-space
         cd hf-space
         
         # Sync files using rsync, excluding .git directory
