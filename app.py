@@ -8,6 +8,14 @@ from backend.ip_extractor import IPExtractor
 from backend.webpage_summarizer import WebpageSummarizer
 from ui.message_handler import UIMessageHandler
 
+# Page configuration - MUST be first Streamlit command
+st.set_page_config(
+    page_title="🌐 WebPage Summarizer",
+    page_icon="🌐",
+    layout="wide",
+    initial_sidebar_state="collapsed"
+)
+
 # Load environment variables
 load_dotenv()
 
@@ -67,14 +75,6 @@ def summarize_webpage(url: str) -> str:
 
 
 def main():
-    # Page configuration
-    st.set_page_config(
-        page_title="🌐 WebPage Summarizer",
-        page_icon="🌐",
-        layout="wide",
-        initial_sidebar_state="collapsed"
-    )
-
     # Main header
     st.title("🌐 WebPage Summarizer")
     st.markdown(
