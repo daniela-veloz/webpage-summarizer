@@ -23,14 +23,8 @@ jobs:
         git clone https://huggingface.co/spaces/daniela-veloz/WebSummarizer hf-space
         cd hf-space
         
-        # Remove all files except .git
-        find . -name ".git" -prune -o -type f -exec rm -f {} +
-        find . -name ".git" -prune -o -type d -empty -delete 2>/dev/null || true
-        
-        # Copy all files from the source repo
-        cp -r ../. .
-        rm -rf .git
-        mv ../hf-space/.git .
+        # Sync files using rsync, excluding .git directory
+        rsync -av --exclude='.git' ../. .
         
         # Configure git with HF token
         git remote set-url origin https://daniela-veloz:${HF_TOKEN}@git.hf.co/spaces/daniela-veloz/WebSummarizer
