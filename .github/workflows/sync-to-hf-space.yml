@@ -25,7 +25,7 @@ jobs:
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
           
-          git clone git@hf.co:spaces/daniela-veloz/WebSummarizer hf-space
+          git clone git@hf.co:spaces/daniela-veloz/WebPageSummarizer hf-space
           cd hf-space
 
           # Sync files using rsync, excluding .git directory
