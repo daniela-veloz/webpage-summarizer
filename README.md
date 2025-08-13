@@ -12,6 +12,8 @@ license: mit
 
 # 🌐 WebPage Summarizer
 
+**[🚀 Try the Live Application](https://huggingface.co/spaces/daniela-veloz/WebSummarizer)**
+
 An intelligent web content summarization tool that extracts and condenses webpage information using advanced AI models.
 
 ## 📋 Overview
@@ -104,7 +106,6 @@ This application creates concise, structured summaries of web content by leverag
 2. **Get Summary**: Click "Summarize" to receive an intelligent markdown summary
 
 ## 🎯 Perfect For
-
 - **News Articles**: Quickly digest lengthy news content
 - **Research Papers**: Extract key points from academic materials
 - **Documentation**: Summarize technical documentation
