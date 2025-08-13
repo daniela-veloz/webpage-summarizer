@@ -180,12 +180,6 @@ def main():
     - Repeated requests to the same URL are served instantly from cache
     - Rate limits reset every hour/day to ensure fair access for all users
     """)
-    
-    # Contact section
-    st.markdown("---")
-    st.markdown("### 📞 Contact")
-    st.markdown("**Connect with the developer:** [Daniela Veloz on LinkedIn](https://www.linkedin.com/in/daniela-veloz/)")
-
 
 if __name__ == "__main__":
     main()
