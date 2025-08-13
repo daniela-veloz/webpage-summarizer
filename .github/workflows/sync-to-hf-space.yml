@@ -28,8 +28,8 @@ jobs:
           git clone git@hf.co:spaces/daniela-veloz/WebPageSummarizer hf-space
           cd hf-space
 
-          # Sync files using rsync, excluding .git directory
-          rsync -av --exclude='.git' ../. .
+          # Sync files using rsync, excluding .git and hf-space directories
+          rsync -av --exclude='.git' --exclude='hf-space' ../. .
 
           # Commit and push changes
           git add .
