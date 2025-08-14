@@ -27,7 +27,12 @@ class URLCache:
                              Defaults to 24 hours.
         """
         self.cache_dir = Path(cache_dir)
-        self.cache_dir.mkdir(exist_ok=True)
+        self.cache_enabled = True
+        try:
+            self.cache_dir.mkdir(exist_ok=True)
+        except PermissionError:
+            print(f"Warning: Cannot create cache directory {cache_dir}. Caching disabled.")
+            self.cache_enabled = False
         self.cache_hours = cache_hours
     
     def _get_cache_key(self, url):
@@ -49,6 +54,9 @@ class URLCache:
         Returns:
             str or None: The cached summary if found and valid, None otherwise
         """
+        if not self.cache_enabled:
+            return None
+            
         cache_key = self._get_cache_key(url)
         cache_file = self._get_cache_file(cache_key)
         
@@ -85,6 +93,9 @@ class URLCache:
             url (str): The URL to cache the summary for
             summary (str): The summary content to cache
         """
+        if not self.cache_enabled:
+            return
+            
         cache_key = self._get_cache_key(url)
         cache_file = self._get_cache_file(cache_key)
         
