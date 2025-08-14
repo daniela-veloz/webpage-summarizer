@@ -11,13 +11,29 @@ license: mit
 
 # 🌐 WebPage Summarizer
 
-**[🚀 Try the Live Application](https://huggingface.co/spaces/daniela-veloz/WebSummarizer)**
+**[🚀 Try the Live Application](https://huggingface.co/spaces/daniela-veloz/WebPageSummarizer)**
 
 An intelligent web content summarization tool that extracts and condenses webpage information using advanced AI models.
 
 ## 📋 Overview
 
 This application creates concise, structured summaries of web content by leveraging state-of-the-art language models and robust web scraping techniques. Perfect for quickly understanding lengthy articles, blog posts, or documentation.
+
+## 🤖 Gen-AI Capabilities Demonstrated
+
+This project showcases several key generative AI capabilities and best practices:
+
+### ✨ LLM Integration & Optimization
+- **Model Selection**: Strategic use of OpenAI's `gpt-4o-mini` for cost-effective text summarization
+- **Prompt Engineering**: Optimized prompts for structured markdown output with TL;DR sections
+- **Context Management**: Intelligent content preprocessing to stay within token limits
+- **API Efficiency**: Single-call summarization with consistent formatting
+
+### 🏗️ Scalable AI Architecture
+- **Modular Design**: Clean separation between AI logic, web scraping, and UI layers
+- **Resource Management**: Efficient token usage and response caching
+- **User Experience**: Real-time AI processing with progress feedback
+- **Security**: Safe handling of API keys and user data
 
 ## ✨ Key Features
 
@@ -195,15 +211,5 @@ Try these sample URLs:
 - Summaries include TL;DR sections for quick insights
 - Cached results provide instant responses
 - Rate limits reset hourly/daily for fair usage
-
-## 📞 Contact
-
-**Developer:** [Daniela Veloz](https://www.linkedin.com/in/daniela-veloz/)
-
-Connect on LinkedIn for questions, feedback, or collaboration opportunities!
-
-## 🔄 Auto-Sync
-
-This repository automatically syncs with [Hugging Face Space](https://huggingface.co/spaces/daniela-veloz/WebSummarizer) on every push to main using efficient rsync technology.
 
 
